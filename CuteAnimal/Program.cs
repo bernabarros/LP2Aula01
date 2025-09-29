@@ -7,7 +7,7 @@ namespace CuteAnimal
         private static void Main(string[] args)
         {
             Cat cat1 = new Cat("kitty", Mood.Happy, Feed.Satisfied);
-            Cat cat2 = new Cat("kitcat", Mood.Grumpy, Feed.Hungry);
+            Cat cat2 = new Cat("kitcat");
 
             Console.WriteLine(cat1.GetName());
             Console.WriteLine(cat2.GetName());

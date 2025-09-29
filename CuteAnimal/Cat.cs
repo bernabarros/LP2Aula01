@@ -8,48 +8,83 @@ namespace CuteAnimal
     public class Cat
     {
         private const int maxenergy = 100;
-        private string name;
+        public string Name{ get;}
         private int energy;
+        public int Energy
+        {
+            get
+            {
+                return energy;
+            }
+            private set
+            {
+                if (energy > 100) energy = 100;
+                else if (energy < 0) energy = 0;
+            }
+        }
+        private Random random;
         private Mood moodStatus;
         private Feed feedStatus;
 
+        private Feed[] possibleFeedStatus;
+        private Mood[] possibleMoodStatus;
+
+        private Cat()
+        {
+            random = new Random();
+
+            possibleFeedStatus = (Feed[])Enum.GetValues(typeof(Feed));
+            possibleMoodStatus = (Mood[])Enum.GetValues(typeof(Mood));
+        }
         public Cat(string name, Mood moodStatus, Feed feedStatus)
         {
-            this.name = name;
+            this.Name = name;
             this.moodStatus = moodStatus;
             this.feedStatus = feedStatus;
             this.energy = maxenergy;
         }
-
-        public string GetName()
+        public Cat(string name) : this()
         {
-            return name;
+            this.Name = name;
+            energy = random.Next(maxenergy + 1);
+            feedStatus = possibleFeedStatus[random.Next(possibleFeedStatus.Length)];
+            moodStatus = possibleMoodStatus[random.Next(possibleMoodStatus.Length)];
         }
 
-        public int GetEnergy()
+        public string GetName() => Name;
+
+        public int GetEnergy() => energy;
+
+        public void Sleep()
         {
-            return energy;
+            energy += 20;
+            if (energy > maxenergy) energy = 100;
+
+            if (feedStatus > Feed.Starving) feedStatus--;
+            moodStatus = Mood.Grumpy;
+        }
+        public void Eat()
+        {
+            if (feedStatus < Feed.AboutToExplode)
+            {
+                feedStatus++;
+            }
         }
 
-        public int Sleep()
+        public void Play()
         {
-            energy = maxenergy;
-            return energy;
+            energy -= 15;
+            if (energy < 0) energy = 0;
+            moodStatus = Mood.Happy;
         }
 
-        public Feed GetFeedStatus()
-        {
-            return feedStatus;
-        }
-
-        public Mood GetMoodStatus()
-        {
-            return moodStatus;
-        }
+        public Feed GetFeedStatus() => feedStatus;
+        public Mood GetMoodStatus() => moodStatus;
         public void CatNoise()
         {
             Console.WriteLine("Meow!");
-            this.energy--;
+            energy -= 5;
+            if (energy < 0) energy = 0;
         }
     }
 }
